@@ -2,6 +2,13 @@
 
 2023 3-2 Mobile Programming Team Project
 
+## Team Member
+
+|                        Kim Siheon                         |                        Park Hyunseo                        |                      Lee Jeonghyeon                       |
+| :-------------------------------------------------------: | :--------------------------------------------------------: | :-------------------------------------------------------: |
+|        [Siheon Kim](https://github.com/siheon0411)        |    [Hyunseo Park (Sean)](https://github.com/skehdxhd96)    |      [jeonghyeonee](https://github.com/jeonghyeonee)      |
+| ![](https://avatars.githubusercontent.com/u/68041137?v=4) | ![](https://avatars.githubusercontent.com/u/123967536?v=4) | ![](https://avatars.githubusercontent.com/u/33801356?v=4) |
+
 ## How to Collaborate
 
 ### 1. Fork
