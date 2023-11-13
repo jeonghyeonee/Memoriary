@@ -69,3 +69,21 @@
 ### 9. Code Review & Merge Pull Request
 
 - The reviewer will perform a code review and decide whether to merge the pull request if there are no issues.
+
+### 10. Synchronization and Branch Deletion After Merging
+
+- After the merge is completed in the original repository, it's important to synchronize your local `main` branch with the code in the original repository (jeonghyeonee/Memoriary).
+- To do this, go to your own GitHub repository, confirm that the active branch is `main`, and click the `Sync fork` button, then press the `Update branch` button.
+- To synchronize your local `main` branch with the changes, you can execute the following commands to delete the working local branch:
+
+```sh
+  # Synchronize the code
+  git checkout main
+  git pull origin main
+
+  # Forcefully delete the local branch
+  git branch -D <branch>
+
+  # Delete the remote branch
+  git push origin --delete <branch>
+```
