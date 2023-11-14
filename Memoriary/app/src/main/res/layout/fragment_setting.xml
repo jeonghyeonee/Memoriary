@@ -10,11 +10,20 @@
         android:id="@+id/tvMemoriary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="My Memoriary"
         android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    
+    <ImageView
+        android:id="@+id/btnSetting"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/setting" />
 
     <TextView
         android:id="@+id/tvWelcome"
@@ -34,7 +43,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="50dp"
-        android:text="Name: Hello World\n Age: 72\n other specifics"
+        android:textSize="20dp"
+        android:text="Name: Hello World\nAge: 72\nother specifics"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
@@ -125,5 +135,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvWelcome"
         tools:srcCompat="@tools:sample/avatars" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
