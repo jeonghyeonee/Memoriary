@@ -15,7 +15,11 @@
         android:id="@+id/navigation_diary"
         android:name="com.example.memoriary.ui.diary.DiaryFragment"
         android:label="Diary"
-        tools:layout="@layout/fragment_diary" />
+        tools:layout="@layout/fragment_diary" >
+        <action
+            android:id="@+id/action_navigation_diary_to_postFragment"
+            app:destination="@id/postFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_todo"
@@ -34,6 +38,11 @@
         android:name="com.example.memoriary.ui.todo.TodoFragment"
         android:label="Setting"
         tools:layout="@layout/fragment_setting" />
+    <fragment
+        android:id="@+id/postFragment"
+        android:name="com.example.memoriary.ui.diary.PostFragment"
+        android:label="fragment_post"
+        tools:layout="@layout/fragment_post" />
 
 
 </navigation>

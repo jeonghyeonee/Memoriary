@@ -1,60 +1,86 @@
 package com.example.memoriary.ui.diary
 
+import ThumbnailAdapter
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.commit
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.memoriary.MainActivity
 import com.example.memoriary.R
+import com.example.memoriary.databinding.FragmentThumbnailsBinding
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ThumbnailsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ThumbnailsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    lateinit var binding: FragmentThumbnailsBinding
+    private lateinit var database: DatabaseReference
 
+    interface FirebaseCallBack {
+        fun onDataLoaded(posts: MutableList<Post>)
+        fun onError(error: Exception)
+    }
+    private fun readFromFirebase(callback: FirebaseCallBack) {
+        val userId = "rainday0828"
+        database = Firebase.database.reference
+        val posts = mutableListOf<Post>()
+
+        database.child(userId).child("posts").get().addOnSuccessListener {
+            for (post in it.children) {
+                val title = post.child("title").value.toString()
+                val content = post.child("content").value.toString()
+                val post = Post(title, content)
+                Log.d("Thumb", "$post")
+                posts.add(post)
+            }
+            Log.d("Thumb", "$posts")
+            callback.onDataLoaded(posts)
+        }.addOnFailureListener{error ->
+            callback.onError(error)
+        }
+        Log.d("Thumb", "$posts")
+
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_thumbnails, container, false)
+        binding = FragmentThumbnailsBinding.inflate(inflater, container, false)
+        readFromFirebase(object: FirebaseCallBack{
+            override fun onDataLoaded(posts: MutableList<Post>) {
+                val thumbnailAdapter = ThumbnailAdapter(posts)
+                binding.thumbnailsRecyclerView.adapter = thumbnailAdapter
+                binding.thumbnailsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+            }
+
+            override fun onError(error: Exception) {
+                Log.e("Thumb", "Error getting data", error)
+            }
+        })
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ThumbnailsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ThumbnailsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    fun updateDataFromFirebase() {
+        readFromFirebase(object : FirebaseCallBack {
+            override fun onDataLoaded(posts: MutableList<Post>) {
+                val thumbnailAdapter = ThumbnailAdapter(posts)
+                binding.thumbnailsRecyclerView.adapter = thumbnailAdapter
+                binding.thumbnailsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
             }
+
+            override fun onError(error: Exception) {
+                Log.e("Thumb", "Error getting data", error)
+            }
+        })
     }
 }
+
