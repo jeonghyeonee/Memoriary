@@ -27,6 +27,7 @@ class WriteFragment : Fragment() {
     lateinit var binding : FragmentWriteBinding
     private val databaseReference = FirebaseDatabase.getInstance().reference
     private var writeFragmentCallback: WriteFragmentCallback? = null
+    lateinit var thumbnailsFragment: ThumbnailsFragment
 
     private fun saveToFirebase(title: String, content: String) {
         val currentUserID = "rainday0828"
@@ -68,7 +69,6 @@ class WriteFragment : Fragment() {
 //                CoroutineScope(Main).launch {
 //                    val image=imageGen(content)
 //                    Log.d("OpenAI", "Succeed!")
-//
 //                }
             } else {
                 // Handle empty title or content
@@ -80,19 +80,19 @@ class WriteFragment : Fragment() {
         writeFragmentCallback = callback
     }
 
-    suspend fun imageGen(content: String): List<ImageJSON>{
-        val openai = OpenAI(
-            token = "your-api-key",
-            timeout = Timeout(socket = 60.seconds)
-        )
-
-        val image = openai.imageJSON(
-            creation = ImageCreation(
-                prompt = content,
-                n = 1,
-                size = ImageSize.is1024x1024
-            )
-        )
-        return image
-    }
+//    suspend fun imageGen(content: String): List<ImageJSON>{
+//        val openai = OpenAI(
+//            token = "your-api-key",
+//            timeout = Timeout(socket = 60.seconds)
+//        )
+//
+//        val image = openai.imageJSON(
+//            creation = ImageCreation(
+//                prompt = content,
+//                n = 1,
+//                size = ImageSize.is1024x1024
+//            )
+//        )
+//        return image
+//    }
 }
