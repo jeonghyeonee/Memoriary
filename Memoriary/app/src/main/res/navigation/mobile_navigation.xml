@@ -35,14 +35,15 @@
 
     <fragment
         android:id="@+id/navigation_setting"
-        android:name="com.example.memoriary.ui.todo.TodoFragment"
+        android:name="com.example.memoriary.ui.mypage.MypageFragment"
         android:label="Setting"
-        tools:layout="@layout/fragment_setting" />
-    <fragment
-        android:id="@+id/postFragment"
-        android:name="com.example.memoriary.ui.diary.PostFragment"
-        android:label="fragment_post"
-        tools:layout="@layout/fragment_post" />
+        tools:layout="@layout/fragment_mypage" />
+
+<!--    <fragment-->
+<!--        android:id="@+id/postFragment"-->
+<!--        android:name="com.example.memoriary.ui.diary.PostFragment"-->
+<!--        android:label="fragment_post"-->
+<!--        tools:layout="@layout/fragment_post" />-->
 
 
 </navigation>
