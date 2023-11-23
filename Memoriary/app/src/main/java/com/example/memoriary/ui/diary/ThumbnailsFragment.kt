@@ -1,6 +1,7 @@
 package com.example.memoriary.ui.diary
 
 import ThumbnailAdapter
+import ThumbnailAdapter.Companion.posts
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -32,9 +33,10 @@ class ThumbnailsFragment : Fragment() {
 
         database.child(userId).child("posts").get().addOnSuccessListener {
             for (post in it.children) {
+                val key = post.key.toString()
                 val title = post.child("title").value.toString()
                 val content = post.child("content").value.toString()
-                val post = Post(title, content)
+                val post = Post(key, title, content)
                 Log.d("Thumb", "$post")
                 posts.add(post)
             }
@@ -82,5 +84,13 @@ class ThumbnailsFragment : Fragment() {
             }
         })
     }
+
+    private fun updateAdapterAfterDeletion(post: Post) {
+        val thumbnailAdapter = ThumbnailAdapter(posts)
+        binding.thumbnailsRecyclerView.adapter = thumbnailAdapter
+        binding.thumbnailsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+
 }
 

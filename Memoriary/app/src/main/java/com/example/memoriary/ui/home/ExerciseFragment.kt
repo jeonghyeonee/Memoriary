@@ -7,6 +7,9 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +20,10 @@ class ExerciseFragment : Fragment(), SensorEventListener {
     lateinit var binding: FragmentExerciseBinding
     lateinit var sensorManager: SensorManager
     private var shakeCount = 0
-    private var targetShakeCount = 4
+    private var targetShakeCount = 0
+    private val delayBetweenShakes = 800L // 2 seconds
+    private val handler = Handler(Looper.getMainLooper())
+    private var isShakeInProgress = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -45,7 +51,11 @@ class ExerciseFragment : Fragment(), SensorEventListener {
 
     private fun startExercise() {
         val randomTimes = (1..5).random()
-        binding.instruction.text = "Shake your phone $randomTimes times"
+        targetShakeCount = randomTimes
+        shakeCount = 0
+
+        // Initiate the first shake after a delay
+        binding.instruction.text = "Shake your phone $targetShakeCount times"
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -55,19 +65,36 @@ class ExerciseFragment : Fragment(), SensorEventListener {
     }
 
     private fun handleShake(event: SensorEvent) {
-        val x = event.values[0]
-        val y = event.values[1]
-        val z = event.values[2]
+        if (!isShakeInProgress) {
+            val x = event.values[0]
+            val y = event.values[1]
+            val z = event.values[2]
 
-        val acceleration = Math.sqrt((x * x + y * y + z * z).toDouble()) - SensorManager.GRAVITY_EARTH
-        if (acceleration > 1.5) { // You can adjust this threshold
-            shakeCount++
-            if (shakeCount == targetShakeCount) {
-                showSuccessDialog()
-                shakeCount = 0
-                startExercise()
+            val acceleration =
+                Math.sqrt((x * x + y * y + z * z).toDouble()) - SensorManager.GRAVITY_EARTH
+
+            if (acceleration > 10) { // You can adjust this threshold
+                Log.d("Exercise", "$acceleration")
+                shakeCount++
+                showProgress(targetShakeCount - shakeCount)
+                isShakeInProgress = true
+
+                // Delay for 2 seconds before allowing the next shake
+                handler.postDelayed({
+                    isShakeInProgress = false
+                }, delayBetweenShakes)
+
+                if (shakeCount == targetShakeCount) {
+                    showSuccessDialog()
+                    shakeCount = 0
+                    startExercise()
+                }
             }
         }
+    }
+
+    private fun showProgress(num: Int) {
+        binding.instruction.text = "$num more!"
     }
 
     private fun showSuccessDialog() {
