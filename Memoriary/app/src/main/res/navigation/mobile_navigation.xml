@@ -42,16 +42,7 @@
         android:name="com.example.memoriary.ui.todo.TodoFragment"
         android:label="Setting"
         tools:layout="@layout/fragment_setting" />
-    <fragment
-        android:id="@+id/postFragment"
-        android:name="com.example.memoriary.ui.diary.PostFragment"
-        android:label="fragment_post"
-        tools:layout="@layout/fragment_post" />
-    <fragment
-        android:id="@+id/exerciseFragment"
-        android:name="com.example.memoriary.ui.home.ExerciseFragment"
-        android:label="fragment_exercise"
-        tools:layout="@layout/fragment_exercise" />
+
 
 
 </navigation>
