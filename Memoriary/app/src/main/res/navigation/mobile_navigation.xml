@@ -16,9 +16,6 @@
         android:name="com.example.memoriary.ui.diary.DiaryFragment"
         android:label="Diary"
         tools:layout="@layout/fragment_diary" >
-        <action
-            android:id="@+id/action_navigation_diary_to_postFragment"
-            app:destination="@id/postFragment" />
     </fragment>
 
     <fragment
