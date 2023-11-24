@@ -1,12 +1,13 @@
 package com.example.memoriary.ui.home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.memoriary.R
 import com.example.memoriary.databinding.FragmentHomeBinding
 
 // TODO: Implement Home Page
@@ -18,6 +19,7 @@ private var _binding: FragmentHomeBinding? = null
   // onDestroyView.
   private val binding get() = _binding!!
 
+  @SuppressLint("SuspiciousIndentation")
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -29,10 +31,12 @@ private var _binding: FragmentHomeBinding? = null
     _binding = FragmentHomeBinding.inflate(inflater, container, false)
     val root: View = binding.root
 
-    val textView: TextView = binding.textHome
-    homeViewModel.text.observe(viewLifecycleOwner) {
-      textView.text = it
-    }
+      binding.startButton.setOnClickListener{
+          var exerciseFragment = ExerciseFragment()
+          val transaction = requireActivity().supportFragmentManager.beginTransaction()
+          transaction.replace(R.id.homeFrame, exerciseFragment)
+          transaction.commit()
+      }
     return root
   }
 

@@ -46,6 +46,9 @@ private var _binding: FragmentDiaryBinding? = null
 
           override fun createFragment(position: Int): Fragment {
               Log.d("Diary", "${fragments[position]} created")
+              if (position == 1){
+                  thumbnailTab.updateDataFromFirebase()
+              }
               return fragments[position]
           }
       }
@@ -70,6 +73,6 @@ override fun onDestroyView() {
     }
 
     override fun onDataSaved() {
-        thumbnailTab.updateDataFromFirebase()
+        TODO("Not yet implemented")
     }
 }
