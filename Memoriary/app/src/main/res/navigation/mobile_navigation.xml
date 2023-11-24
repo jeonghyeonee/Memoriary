@@ -9,7 +9,8 @@
         android:id="@+id/navigation_home"
         android:name="com.example.memoriary.ui.home.HomeFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_diary"
@@ -34,13 +35,6 @@
         android:id="@+id/navigation_setting"
         android:name="com.example.memoriary.ui.mypage.MypageFragment"
         android:label="Setting"
-        tools:layout="@layout/fragment_mypage" />
-
-<!--    <fragment-->
-<!--        android:id="@+id/postFragment"-->
-<!--        android:name="com.example.memoriary.ui.diary.PostFragment"-->
-<!--        android:label="fragment_post"-->
-<!--        tools:layout="@layout/fragment_post" />-->
-
+        tools:layout="@layout/fragment_setting"/>
 
 </navigation>
