@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="true" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Memoriary"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.quiz.QuizActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.mypage.QuestionActivity"
             android:exported="false" />
@@ -38,7 +45,5 @@
             </intent-filter>
         </activity>
     </application>
-
-    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true" />
 
 </manifest>
