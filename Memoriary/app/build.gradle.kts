@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -16,6 +18,15 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+
+        // 프로젝트 내에서 언제든지 사용이 가능한 변수들이다.
+        // 타입 - 키 - 값으로 저장된다.
+        buildConfigField("String", "OPENAI_API_KEY", getApiKey("openai_api_key"))
+
+        // 매니페스트에서 사용이 가능하다. 구글맵 같은 경우가 이에 해당한다.
+        // 키 - 값으로 저장된다.
+        //manifestPlaceholders = [OPENAI_API_KEY: openai_api_key]
     }
 
     buildFeatures {
@@ -23,17 +34,12 @@ android {
     }
 
     buildTypes {
-        debug {
-            //buildConfigField("String", "GPT_API_KEY", "\"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\"")
-        }
-
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            //buildConfigField("String", "GPT_API_KEY", "\"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\"")
 
         }
     }
@@ -47,6 +53,11 @@ android {
     buildFeatures {
         viewBinding = true
     }
+}
+
+// local.property의 api key 불러오기용 함수 생성
+fun getApiKey(propertyKey: String):String {
+    return gradleLocalProperties(rootDir).getProperty(propertyKey)
 }
 
 dependencies {

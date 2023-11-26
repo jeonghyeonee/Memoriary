@@ -1,0 +1,96 @@
+<!-- activity_quiz.xml -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".ui.quiz.SampleActivity">
+
+    <TextView
+        android:id="@+id/originalDiaryTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Original Diary:"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- 객관식 퀴즈 -->
+    <RadioGroup
+        android:id="@+id/multipleChoiceQuestionRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/multipleChoiceQuestionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. Multiple-choice question:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- 각 라디오 버튼 -->
+        <RadioButton
+            android:id="@+id/choiceARadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="a) Chicken with beer"/>
+        <!-- ... 나머지 라디오 버튼 추가 ... -->
+
+    </RadioGroup>
+
+    <!-- 주관식 퀴즈 -->
+    <EditText
+        android:id="@+id/shortAnswerQuestionEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="2. Short answer question:"
+        android:inputType="text"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- O/X 퀴즈 -->
+    <RadioGroup
+        android:id="@+id/trueFalseQuestionRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/trueFalseQuestionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3. True/false question:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- O/X 라디오 버튼 -->
+        <RadioButton
+            android:id="@+id/trueRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="True"/>
+        <RadioButton
+            android:id="@+id/falseRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="False"/>
+
+    </RadioGroup>
+
+    <!-- Submit 버튼 -->
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_gravity="center"/>
+
+</LinearLayout>
