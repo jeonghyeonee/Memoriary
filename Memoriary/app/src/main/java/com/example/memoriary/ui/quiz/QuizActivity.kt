@@ -25,6 +25,8 @@ class QuizActivity : AppCompatActivity() {
                 "I went back to my house and ate some snacks." +
                 "It was a fantastic day."
 
+        binding.originalDiaryTextView.text = diaryText
+
         // Coroutine scope for asynchronous tasks
         lifecycleScope.launch {
             // Use withContext to switch to the IO dispatcher for networking operations

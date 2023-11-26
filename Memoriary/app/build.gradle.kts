@@ -24,7 +24,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "GPT_API_KEY", "\"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\"")
+            //buildConfigField("String", "GPT_API_KEY", "\"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\"")
         }
 
         release {
@@ -33,7 +33,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "GPT_API_KEY", "\"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\"")
+            //buildConfigField("String", "GPT_API_KEY", "\"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\"")
 
         }
     }
