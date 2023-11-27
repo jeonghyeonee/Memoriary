@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.example.memoriary.MainActivity
 import com.example.memoriary.R
 import com.example.memoriary.databinding.FragmentMypageBinding
+import com.example.memoriary.ui.quiz.QuizActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,6 +45,10 @@ class MypageFragment : Fragment() {
 
         binding.btnSetting.setOnClickListener {
             // setting을 activity로 할지 fragment로 할지 고민
+            activity?.let {
+                val intent = Intent(context, QuizActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         binding.btnChangeMyProfile.setOnClickListener {
