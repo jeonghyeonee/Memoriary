@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/let_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/let_start"
+        android:textAppearance="@style/let_start"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/memoriay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginBottom="68dp"
+        android:gravity="center_horizontal|top"
+        android:text="Memoriary"
+        android:textColor="@color/green"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/nameInput"
+        app:layout_constraintStart_toEndOf="@+id/name"
+        app:layout_constraintTop_toBottomOf="@+id/let_start"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="28dp"
+        android:gravity="top"
+        android:lineSpacingExtra="-3sp"
+        android:text="*name"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/nameInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/memoriay"
+        app:layout_constraintVertical_bias="0.109" />
+
+    <EditText
+        android:id="@+id/nameInput"
+        android:layout_width="356dp"
+        android:layout_height="41dp"
+        android:layout_marginBottom="457dp"
+        android:hint="Name"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/name"
+        app:layout_constraintTop_toBottomOf="@+id/let_start"
+        app:layout_constraintVertical_bias="0.426" />
+
+<!--    BirthDate Input-->
+    <TextView
+        android:id="@+id/textBirthDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="8dp"
+        android:text="*Birth Date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameInput" />
+
+
+    <NumberPicker
+        android:id="@+id/numberPickerYear"
+        android:layout_width="116dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="4dp"
+        android:layout_weight="1"
+        android:selectionDividerHeight="0dp"
+        app:layout_constraintEnd_toStartOf="@+id/numberPickerDay"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textBirthDate"
+        app:layout_constraintTop_toBottomOf="@+id/textBirthDate"
+        android:scaleX="0.8"
+        android:scaleY="0.8"/>
+
+    <NumberPicker
+        android:id="@+id/numberPickerMonth"
+        android:layout_width="93dp"
+        android:layout_height="32dp"
+        app:layout_constraintEnd_toStartOf="@+id/numberPickerDay"
+        app:layout_constraintHorizontal_bias="0.426"
+        android:selectionDividerHeight="0dp"
+        app:layout_constraintStart_toEndOf="@+id/numberPickerYear"
+        app:layout_constraintTop_toTopOf="@+id/numberPickerYear"
+        app:layout_constraintTop_toBottomOf="@+id/textBirthDate"
+        android:scaleX="0.8"
+        android:scaleY="0.8"/>
+
+    <NumberPicker
+        android:id="@+id/numberPickerDay"
+        android:layout_width="77dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="8dp"
+        android:selectionDividerHeight="0dp"
+        app:layout_constraintEnd_toEndOf="@+id/nameInput"
+        app:layout_constraintTop_toTopOf="@+id/numberPickerYear"
+        app:layout_constraintTop_toBottomOf="@+id/textBirthDate"
+        android:scaleX="0.8"
+        android:scaleY="0.8"/>
+
+
+<!--    Email Input-->
+
+    <TextView
+        android:id="@+id/textEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="*Email"
+        app:layout_constraintStart_toStartOf="@+id/textBirthDate"
+        app:layout_constraintTop_toBottomOf="@+id/textBirthDate" />
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:hint="Enter Email"
+        app:layout_constraintEnd_toEndOf="@+id/nameInput"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textEmail"
+        app:layout_constraintTop_toBottomOf="@+id/textEmail" />
+
+<!--    Password-->
+    <TextView
+        android:id="@+id/textPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Password"
+        app:layout_constraintStart_toStartOf="@+id/textEmail"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
+
+    <!--Password Check-->
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Enter Password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/nameInput"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textPassword"
+        app:layout_constraintTop_toBottomOf="@+id/textPassword" />
+
+    <TextView
+        android:id="@+id/textPasswordConfirmation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Confirm Password"
+        app:layout_constraintStart_toStartOf="@+id/textPassword"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
+
+    <EditText
+        android:id="@+id/editTextPasswordConfirmation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/nameInput"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textPasswordConfirmation"
+        app:layout_constraintTop_toBottomOf="@+id/textPasswordConfirmation" />
+
+<!--    Gender-->
+    <RadioGroup
+        android:id="@+id/radioGroupGender"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/nameInput"
+        app:layout_constraintStart_toStartOf="@+id/textPasswordConfirmation"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPasswordConfirmation">
+
+        <RadioButton
+            android:id="@+id/radioButtonMale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male"
+            android:textSize="13sp" />
+
+        <RadioButton
+            android:id="@+id/radioButtonFemale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female"
+            android:textSize="13sp" />
+
+    </RadioGroup>
+
+<!--    Agreement-->
+    <CheckBox
+        android:id="@+id/checkBoxAgree"
+        android:layout_width="356dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="4dp"
+        android:text="I agree to collect personal information and use of the terms and conditions."
+        app:layout_constraintStart_toStartOf="@+id/radioGroupGender"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupGender" />
+
+<!--    SignUp Button-->
+    <Button
+        android:id="@+id/buttonSignUp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Sign Up"
+        app:layout_constraintEnd_toEndOf="@+id/nameInput"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/checkBoxAgree"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxAgree" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
