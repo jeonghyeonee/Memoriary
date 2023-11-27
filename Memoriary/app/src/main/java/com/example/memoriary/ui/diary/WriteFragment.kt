@@ -10,9 +10,12 @@ import com.aallam.openai.api.http.Timeout
 import com.aallam.openai.api.image.ImageCreation
 import com.aallam.openai.api.image.ImageJSON
 import com.aallam.openai.api.image.ImageSize
+import com.aallam.openai.api.image.ImageURL
+import com.aallam.openai.api.model.ModelId
 import com.aallam.openai.client.OpenAI
 import com.example.memoriary.R
 import com.example.memoriary.databinding.FragmentWriteBinding
+import com.google.firebase.BuildConfig
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.CoroutineScope
@@ -29,14 +32,14 @@ class WriteFragment : Fragment() {
     private var writeFragmentCallback: WriteFragmentCallback? = null
     lateinit var thumbnailsFragment: ThumbnailsFragment
 
-    private fun saveToFirebase(title: String, content: String) {
+    private fun saveToFirebase(title: String, content: String, image: List<ImageURL>) {
         val currentUserID = "rainday0828"
         val newPostRef = databaseReference.child(currentUserID).child("posts").push()
 
         val post = HashMap<String, Any>()
         post["title"] = title
         post["content"] = content
-//        post["image"] = image
+        post["image"] = image
 
         newPostRef.setValue(post)
             .addOnSuccessListener {
@@ -65,11 +68,11 @@ class WriteFragment : Fragment() {
             val content = binding.content.text.toString()
 
             if (title.isNotEmpty() && content.isNotEmpty()) {
-                saveToFirebase(title, content)
-//                CoroutineScope(Main).launch {
-//                    val image=imageGen(content)
-//                    Log.d("OpenAI", "Succeed!")
-//                }
+                CoroutineScope(Main).launch {
+                    val image=imageGen(content)
+                    saveToFirebase(title, content, image)
+                    Log.d("OpenAI", "Succeed!")
+                }
             } else {
                 // Handle empty title or content
             }
@@ -79,20 +82,19 @@ class WriteFragment : Fragment() {
     fun setWriteFragmentCallback (callback: WriteFragmentCallback) {
         writeFragmentCallback = callback
     }
+    suspend fun imageGen(content: String): List<ImageURL>{
+        val openai = OpenAI(
+            token = "",
+            timeout = Timeout(socket = 60.seconds)
+        )
 
-//    suspend fun imageGen(content: String): List<ImageJSON>{
-//        val openai = OpenAI(
-//            token = "your-api-key",
-//            timeout = Timeout(socket = 60.seconds)
-//        )
-//
-//        val image = openai.imageJSON(
-//            creation = ImageCreation(
-//                prompt = content,
-//                n = 1,
-//                size = ImageSize.is1024x1024
-//            )
-//        )
-//        return image
-//    }
+        val image = openai.imageURL(
+            creation = ImageCreation(
+                prompt = content,
+                n = 1,
+                size = ImageSize.is256x256
+            )
+        )
+        return image
+    }
 }
