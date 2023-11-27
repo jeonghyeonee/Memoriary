@@ -82,9 +82,11 @@ class WriteFragment : Fragment() {
     fun setWriteFragmentCallback (callback: WriteFragmentCallback) {
         writeFragmentCallback = callback
     }
+
+    val apiKey = com.example.memoriary.BuildConfig.OPENAI_API_KEY
     suspend fun imageGen(content: String): List<ImageURL>{
         val openai = OpenAI(
-            token = "",
+            token = apiKey,
             timeout = Timeout(socket = 60.seconds)
         )
 

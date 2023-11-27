@@ -48,7 +48,8 @@ class QuizActivity : AppCompatActivity() {
                 val key = post.key.toString()
                 val title = post.child("title").value.toString()
                 val content = post.child("content").value.toString()
-                val post = Post(key, title, content)
+                val image = "asdfafsd"
+                val post = Post(key, title, content, image)
                 Log.d("Thumb", "$post")
                 posts.add(post)
             }
@@ -67,12 +68,12 @@ class QuizActivity : AppCompatActivity() {
         binding = ActivityQuizBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val text = readFromFirebase(object: FirebaseCallBack {
+        readFromFirebase(object: FirebaseCallBack {
             override fun onDataLoaded(posts: MutableList<Post>) {
                 loadDiary = posts[0].content
                 Log.d("ITMpost", "post: $loadDiary")
 
-                binding.originalDiaryTextView.text = "<Original Diary> \n$loadDiary"
+                binding.originalDiaryTextView.text = "$loadDiary"
 
 
                 val apiKey = BuildConfig.OPENAI_API_KEY
