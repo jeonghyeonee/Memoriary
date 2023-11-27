@@ -70,7 +70,6 @@ class WriteFragment : Fragment() {
 //                    val image=imageGen(content)
 //                    Log.d("OpenAI", "Succeed!")
 //                }
-
             } else {
                 // Handle empty title or content
             }
