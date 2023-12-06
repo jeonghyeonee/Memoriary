@@ -24,8 +24,13 @@ class SignInActivity : AppCompatActivity() {
 
         // Sign In 버튼 클릭 리스너 설정
         binding.buttonSignIn.setOnClickListener {
-            val email = binding.editTextID.text.toString()
-            val password = binding.editTextPassword.text.toString()
+            var email = binding.editTextID.text.toString()
+            var password = binding.editTextPassword.text.toString()
+
+            // 개발중 편의를 위해 임시로 ID, PW 입력해놓는 변수 넣어놓음
+            email = "rainday0828@naver.com"
+            password = "000000"
+
             signIn(email, password)
         }
 

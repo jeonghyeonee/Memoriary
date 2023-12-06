@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.aallam.openai.api.chat.ChatChoice
 import com.aallam.openai.api.chat.ChatCompletion
 import com.aallam.openai.api.chat.ChatCompletionChunk
 import com.aallam.openai.api.chat.ChatCompletionRequest
@@ -77,7 +78,7 @@ class QuizActivity : AppCompatActivity() {
 
 
                 val apiKey = BuildConfig.OPENAI_API_KEY
-                Log.d("ITM", "$apiKey")
+                //Log.d("ITM", "$apiKey")
 
 
                 // Use lifecycleScope.launch for coroutine
@@ -88,13 +89,21 @@ class QuizActivity : AppCompatActivity() {
                         // additional configurations...
                     )
 
-                    val quizInstruction = "Generate a quiz with three types of questions: " +
-                            "Q1. Multiple-choice with 5 options, four correct, one incorrect.\n" +
-                            "Q2. Multiple-choice with 5 options, one correct, four incorrect.\n" +
-                            "Q3. True/false question based on diary events."
+                    val modelId = ModelId("gpt-4")
 
-                    val chatCompletionRequest = ChatCompletionRequest(
-                        model = ModelId("gpt-3.5-turbo"),
+                    val quizInstruction = "You are a Quiz Generator. Your mission is to generate three quizzes based on the input diary. Three quizzes are generated " +
+                    "with three types of questions: \n" +
+                            "Q1. Multiple-choice with 5 options, with four incorrect options, and one correct option. Labeling with number.\n" +
+                            "Q2. Another multiple-choice with 5 options, but with four correct options, and one incorrect option. Question should involve 'not true'.\n" +
+                            "Q3. True/false question based on diary events.\n" +
+                            "You have to provide Q1 between string of <Q1> and <E1>, Q2 between string of <Q2> and <E2>, Q3 between string of <Q3> and <E3>.\n" +
+                            "After providing quizzes, you have to provide answer of each quizzes. Just provide answer number." +
+                            "You have to provide answer of Q1 between string of <A1> and <AE1>, answer of Q2 between string of <A2> and <AE2>, " +
+                            "answer of Q3 between string of <A3> and <AE3>."
+
+
+                    val generateQ1 = ChatCompletionRequest(
+                        model = modelId,
                         messages = listOf(
                             ChatMessage(
                                 role = ChatRole.System,
@@ -106,49 +115,109 @@ class QuizActivity : AppCompatActivity() {
                             )
                         ),
                         temperature = 0.7,
-                        maxTokens = 200,
+                        maxTokens = 300,
                         topP = 0.7,
                         frequencyPenalty = 0.0,
                         presencePenalty = 0.0
                     )
-                    // Assistant 항목을 3개로 늘려서 Q1,Q2,Q3를 각각 도출하는 방안도 생각
 
-                    val completion: ChatCompletion = openAI.chatCompletion(chatCompletionRequest)
-//            Log.d("ITM", "completion")
-//            Log.d("ITM", "${completion}")
-//
-//            Log.d("ITM", "completion.choices")
-//            Log.d("ITM", "${completion.choices}")
-//
-//            Log.d("ITM", "completion.choices.toString()")
-//            Log.d("ITM", "${completion.choices.toString()}")
-//
-//            Log.d("ITM", "completion.choices.first()")
-//            Log.d("ITM", "${completion.choices.first()}")
-//
-//            Log.d("ITM", "completion.choices.first().toString()")
-//            Log.d("ITM", "${completion.choices.first().toString()}")
-//
-//            Log.d("ITM", "completion.choices.first().message.content")
+                    val completion = openAI.chatCompletion(generateQ1)
+
+                    Log.d("ITM", "completion.choices.first().message.content")
                     Log.d("ITM", "${completion.choices.first().message.content}")
 
+                    val inputString = completion.choices.first().message.content.toString()
 
-//            // 퀴즈 코드
-//            val generatedQuiz: String? = completion.choices.firstOrNull()?.message?.content
-//
-//            // generatedQuiz가 null이 아닐 때만 parseGeneratedQuiz 호출
-//            if (generatedQuiz != null) {
-//                val quizzes = parseGeneratedQuiz(generatedQuiz)
-//
-//                // 각 퀴즈를 화면에 표시
-//                displayQuizzes(quizzes)
-//            }
+                    // 퀴즈 추출
+                    val quiz1 = extractContent(inputString, "<Q1>", "<E1>")
+                    val quiz2 = extractContent(inputString, "<Q2>", "<E2>")
+                    val quiz3 = extractContent(inputString, "<Q3>", "<E3>")
+
+                    // 답안 추출
+                    val ans1 = extractContent(inputString, "<A1>", "<AE1>")
+                    val ans2 = extractContent(inputString, "<A2>", "<AE2>")
+                    val ans3 = extractContent(inputString, "<A3>", "<AE3>")
+
+                    // 출력
+                    Log.d("ITM", "Quiz 1: $quiz1")
+                    Log.d("ITM", "Quiz 2: $quiz2")
+                    Log.d("ITM", "Quiz 3: $quiz3")
+                    Log.d("ITM", "Answer 1: $ans1")
+                    Log.d("ITM", "Answer 2: $ans2")
+                    Log.d("ITM", "Answer 3: $ans3")
 
 
                     // Handle the completion result here
-                    binding.summaryTextView.text = completion.choices.first().message.content
+//                    binding.tvQ1.text = completion.choices.first().message.content
+//                    binding.tvQ2.text = "$quiz1\n" + "$quiz2\n" +"$quiz3\n" + "$ans1\n" + "$ans2\n" + "$ans3\n"
+                    binding.tvQ1.text = quiz1
+                    binding.tvQ2.text = quiz2
+                    binding.tvQ3.text = quiz3
+
+                    var userAnsQ1 = ""
+                    var userAnsQ2 = ""
+                    var userAnsQ3 = ""
+
+                    binding.rg1.setOnCheckedChangeListener{ radioGroup, i ->
+                        when(i) {
+                            binding.rb11.id -> userAnsQ1 = binding.rb11.text.toString()
+                            binding.rb12.id -> userAnsQ1 = binding.rb12.text.toString()
+                            binding.rb13.id -> userAnsQ1 = binding.rb13.text.toString()
+                            binding.rb14.id -> userAnsQ1 = binding.rb14.text.toString()
+                            binding.rb15.id -> userAnsQ1 = binding.rb15.text.toString()
+                        }
+                    }
+
+                    binding.rg2.setOnCheckedChangeListener{ radioGroup, i ->
+                        when(i) {
+                            binding.rb21.id -> userAnsQ2 = binding.rb21.text.toString()
+                            binding.rb22.id -> userAnsQ2 = binding.rb22.text.toString()
+                            binding.rb23.id -> userAnsQ2 = binding.rb23.text.toString()
+                            binding.rb24.id -> userAnsQ2 = binding.rb24.text.toString()
+                            binding.rb25.id -> userAnsQ2 = binding.rb25.text.toString()
+                        }
+                    }
+
+                    binding.rg3.setOnCheckedChangeListener{ radioGroup, i ->
+                        when(i) {
+                            binding.rb31.id -> userAnsQ3 = binding.rb31.text.toString()
+                            binding.rb32.id -> userAnsQ3 = binding.rb32.text.toString()
+                        }
+                    }
+
+
+                    binding.btnSubmit.setOnClickListener {
+                        var check1 = "Q1 incorrect"
+                        var check2 = "Q2 incorrect"
+                        var check3 = "Q3 incorrect"
+
+                        Log.d("ITM", "($ans1) ($userAnsQ1)")
+                        Log.d("ITM", "($ans2) ($userAnsQ2)")
+                        Log.d("ITM", "($ans3) ($userAnsQ3)")
+
+                        if (ans1 == userAnsQ1) {
+                            check1 = "Q1 correct"
+                            Log.d("ITM", "($ans1) ($userAnsQ1)")
+                        }
+                        if (ans2 == userAnsQ2) {
+                            Log.d("ITM", "($ans2) ($userAnsQ2)")
+                            check2 = "Q2 correct"
+                        }
+                        if (ans3 == userAnsQ3) {
+                            Log.d("ITM", "($ans3) ($userAnsQ3)")
+                            check3 = "Q3 correct"
+                        }
+                        binding.tvCheck.text = "${check1}\n${check2}\n${check3}"
+                    }
+
+
                 }
 
+            }
+            fun extractContent(input: String, startTag: String, endTag: String): String {
+                val startIndex = input.indexOf(startTag) + startTag.length
+                val endIndex = input.indexOf(endTag, startIndex)
+                return input.substring(startIndex, endIndex).trim()
             }
 
             override fun onError(error: Exception) {
@@ -157,135 +226,7 @@ class QuizActivity : AppCompatActivity() {
         })
 
 
-
-
-//        // Assume that diaryText contains the original diary string
-//        val diaryText = "Today is November 23, 2023. Weather is so cold that it is 3'C. " +
-//                "After the Management Science class, I did some Mobile Programming Team project works. " +
-//                "I went to 'Donghak' to eat dinner and I ordered turkey with makgeolli. It was so delicious. " +
-//                "After that I went to Coin Karaoke with friends and spend 3000 won. " +
-//                "I went back to my house and ate some snacks. " +
-//                "It was a fantastic day."
-//
-//        binding.originalDiaryTextView.text = "<Original Diary> \n$diaryText"
-
-//        // Coroutine scope for asynchronous tasks
-//        lifecycleScope.launch {
-//            // Use withContext to switch to the IO dispatcher for networking operations
-//            val summary = withContext(Dispatchers.IO) {
-//                // Make the API call to GPT API to summarize the diary
-//                val response = GptApiClient.gptApi.summarizeDiary(GptRequest(diaryText)).execute()
-//
-//                // Extract the summary from the response
-//                response.body()?.summary ?: "Summary not available"
-//            }
-//
-//            // Update the UI with the summary
-//            binding.summaryTextView.text = summary
-//        }
-
-
-//        val apiKey = BuildConfig.OPENAI_API_KEY
-//        Log.d("ITM", "$apiKey")
-//
-//
-//        // Use lifecycleScope.launch for coroutine
-//        lifecycleScope.launch {
-//            val openAI = OpenAI(
-//                token = apiKey,
-//                timeout = Timeout(socket = 60.seconds),
-//                // additional configurations...
-//            )
-//
-//            val quizInstruction = "Generate a quiz with three types of questions: " +
-//                    "Q1. Multiple-choice with 5 options, four correct, one incorrect.\n" +
-//                    "Q2. Multiple-choice with 5 options, one correct, four incorrect.\n" +
-//                    "Q3. True/false question based on diary events."
-//
-//            val chatCompletionRequest = ChatCompletionRequest(
-//                model = ModelId("gpt-3.5-turbo"),
-//                messages = listOf(
-//                    ChatMessage(
-//                        role = ChatRole.System,
-//                        content = quizInstruction
-//                    ),
-//                    ChatMessage(
-//                        role = ChatRole.User,
-//                        content = diaryText
-//                    )
-//                ),
-//                temperature = 0.7,
-//                maxTokens = 200,
-//                topP = 0.7,
-//                frequencyPenalty = 0.0,
-//                presencePenalty = 0.0
-//            )
-//            // Assistant 항목을 3개로 늘려서 Q1,Q2,Q3를 각각 도출하는 방안도 생각
-//
-//            val completion: ChatCompletion = openAI.chatCompletion(chatCompletionRequest)
-////            Log.d("ITM", "completion")
-////            Log.d("ITM", "${completion}")
-////
-////            Log.d("ITM", "completion.choices")
-////            Log.d("ITM", "${completion.choices}")
-////
-////            Log.d("ITM", "completion.choices.toString()")
-////            Log.d("ITM", "${completion.choices.toString()}")
-////
-////            Log.d("ITM", "completion.choices.first()")
-////            Log.d("ITM", "${completion.choices.first()}")
-////
-////            Log.d("ITM", "completion.choices.first().toString()")
-////            Log.d("ITM", "${completion.choices.first().toString()}")
-////
-////            Log.d("ITM", "completion.choices.first().message.content")
-//            Log.d("ITM", "${completion.choices.first().message.content}")
-//
-//
-////            // 퀴즈 코드
-////            val generatedQuiz: String? = completion.choices.firstOrNull()?.message?.content
-////
-////            // generatedQuiz가 null이 아닐 때만 parseGeneratedQuiz 호출
-////            if (generatedQuiz != null) {
-////                val quizzes = parseGeneratedQuiz(generatedQuiz)
-////
-////                // 각 퀴즈를 화면에 표시
-////                displayQuizzes(quizzes)
-////            }
-//
-//
-//            // Handle the completion result here
-//            binding.summaryTextView.text = completion.choices.first().message.content
-//        }
-
     }
 
-    private fun parseGeneratedQuiz(generatedQuiz: String): List<Quiz> {
-        // 여기서 generatedQuiz를 파싱하여 실제 Quiz 객체들로 변환하는 로직을 구현
-        // 실제로는 정규표현식이나 특정 규칙을 통해 파싱해야 할 것입니다.
-        return emptyList() // 여기서는 빈 리스트를 반환하였으나 실제로는 파싱 로직을 구현해야 합니다.
-    }
 
-    private fun displayQuizzes(quizzes: List<Quiz>) {
-        // 여기서는 각 퀴즈에 따라 화면에 표시하는 로직을 구현
-        for (i in quizzes.indices) {
-            val quiz = quizzes[i]
-            when (quiz.getType()) {
-                QuizType.MULTIPLE_CHOICE -> {
-                    // 여기에 객관식 퀴즈 표시 로직 추가 (RecyclerView 등 활용)
-                    // 예시: binding.multipleChoiceQuestionTextView.text = quiz.question
-                }
-
-                QuizType.SHORT_ANSWER -> {
-                    // 여기에 주관식 퀴즈 표시 로직 추가 (EditText 등 활용)
-                    // 예시: binding.shortAnswerQuestionEditText.hint = quiz.question
-                }
-
-                QuizType.TRUE_FALSE -> {
-                    // 여기에 O/X 퀴즈 표시 로직 추가 (RadioButton 등 활용)
-                    // 예시: binding.trueFalseQuestionRadioGroup.hint = quiz.question
-                }
-            }
-        }
-    }
 }
