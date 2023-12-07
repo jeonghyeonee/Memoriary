@@ -1,15 +1,31 @@
 package com.example.memoriary.ui.mypage
 
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.memoriary.MainActivity
 import com.example.memoriary.R
 import com.example.memoriary.databinding.FragmentMypageBinding
 import com.example.memoriary.ui.quiz.QuizActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import java.text.SimpleDateFormat
+import java.util.Date
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,6 +44,10 @@ class MypageFragment : Fragment() {
 
     lateinit var binding: FragmentMypageBinding
 
+    lateinit var database: DatabaseReference
+    lateinit var storage: FirebaseStorage
+    lateinit var uri: Uri
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -43,18 +63,33 @@ class MypageFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentMypageBinding.inflate(inflater, container, false)
 
+        database = FirebaseDatabase.getInstance().reference
+        database.get().addOnSuccessListener {
+            it.child("rainday0828").child("posts").let {
+                for (i in it.children) {
+                    var data = i
+                    Log.d("ITM", "$data")
+                }
+            }
+
+        }
+
+        storage = FirebaseStorage.getInstance()
+        binding.btnChangeMyProfile.setOnClickListener {
+            activity?.let {
+                // ACTION_PICK을 사용하여 앨범을 호출한다.
+                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+                registerForActivityResult.launch(intent)
+            }
+        }
+
+
         binding.btnSetting.setOnClickListener {
             // setting을 activity로 할지 fragment로 할지 고민
             activity?.let {
                 val intent = Intent(context, QuizActivity::class.java)
                 startActivity(intent)
-            }
-        }
-
-        binding.btnChangeMyProfile.setOnClickListener {
-            activity?.let {
-                val intent = Intent(context, ChangeprofileActivity::class.java)
-                startActivity(intent)
+                imageUpload(uri)
             }
         }
 
@@ -96,6 +131,39 @@ class MypageFragment : Fragment() {
 
         return binding.root
     }
+
+    private val registerForActivityResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            when (result.resultCode) {
+                AppCompatActivity.RESULT_OK -> {
+
+                    // 변수 uri에 전달 받은 이미지 uri를 넣어준다.
+                    uri = result.data?.data!!
+                    // 이미지를 ImageView에 표시한다.
+                    binding.imageView.setImageURI(uri)
+                }
+            }
+        }
+
+    private fun imageUpload(uri: Uri) {
+        // storage 인스턴스 생성
+        val storage = FirebaseStorage.getInstance()
+        // storage 참조
+        val storageRef = storage.getReference("image")
+        // storage에 저장할 파일명 선언
+        val fileName = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
+        val mountainsRef = storageRef.child("${fileName}.png")
+
+        val uploadTask = mountainsRef.putFile(uri)
+        uploadTask.addOnSuccessListener { taskSnapshot ->
+            // 파일 업로드 성공
+            Toast.makeText(getActivity(), "사진 업로드 성공", Toast.LENGTH_SHORT).show();
+        }.addOnFailureListener {
+            // 파일 업로드 실패
+            Toast.makeText(getActivity(), "사진 업로드 실패", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     companion object {
         /**
