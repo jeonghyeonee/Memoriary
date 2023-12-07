@@ -44,6 +44,7 @@ class MypageFragment : Fragment() {
 
     lateinit var binding: FragmentMypageBinding
 
+    lateinit var auth: FirebaseAuth
     lateinit var database: DatabaseReference
     lateinit var storage: FirebaseStorage
     lateinit var uri: Uri
@@ -63,7 +64,18 @@ class MypageFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentMypageBinding.inflate(inflater, container, false)
 
+        auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
+
+        val user = auth.currentUser
+        if (user != null) {
+            val email = user.email!!
+            val userName = email.substring(0, email.indexOf('@'))
+
+            binding.tvWelcome.text = "Hello, " + userName
+            binding.tvProfile.text = "Name: " + userName + "\nAge: 72\nother specifics"
+        }
+
         database.get().addOnSuccessListener {
             it.child("rainday0828").child("posts").let {
                 for (i in it.children) {
