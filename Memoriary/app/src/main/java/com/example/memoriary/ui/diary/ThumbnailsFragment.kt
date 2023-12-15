@@ -36,7 +36,8 @@ class ThumbnailsFragment : Fragment() {
                 val key = post.key.toString()
                 val title = post.child("title").value.toString()
                 val content = post.child("content").value.toString()
-                val post = Post(key, title, content)
+                val image = post.child("image").child("0").child("url").value.toString()
+                val post = Post(key, title, content, image)
                 Log.d("Thumb", "$post")
                 posts.add(post)
             }

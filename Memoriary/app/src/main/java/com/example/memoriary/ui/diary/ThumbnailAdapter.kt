@@ -3,6 +3,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.memoriary.databinding.ItemViewBinding
 import com.example.memoriary.ui.diary.Post
 import com.google.firebase.database.DatabaseReference
@@ -38,6 +39,9 @@ class ThumbnailAdapter(val posts: MutableList<Post>): RecyclerView.Adapter<Thumb
             Log.d("adapter", "title changed!")
             binding.title.text = post.title
             binding.content.text = post.content
+            val imageUrl = post.image
+            Log.d("adapter", "$imageUrl")
+            Glide.with(binding.root).load(imageUrl).into(binding.imageView)
             binding.deleteButton.setOnClickListener {
                 // Call a function to delete the post from Firebase
                 Log.d("ThumbnailAdapter", "Delete button clicked!")
