@@ -45,9 +45,9 @@
         android:id="@+id/btnSignIn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="SignIn"
-        app:layout_constraintTop_toBottomOf="@+id/textMessage"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:text="Sign In"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textMessage" />
 </androidx.constraintlayout.widget.ConstraintLayout>
