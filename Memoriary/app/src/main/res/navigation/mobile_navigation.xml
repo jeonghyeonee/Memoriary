@@ -3,21 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
+    android:label="My Page"
     app:startDestination="@+id/navigation_home">
 
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.memoriary.ui.home.HomeFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_home" >
-    </fragment>
+        tools:layout="@layout/fragment_home"></fragment>
 
     <fragment
         android:id="@+id/navigation_diary"
         android:name="com.example.memoriary.ui.diary.DiaryFragment"
         android:label="Diary"
-        tools:layout="@layout/fragment_diary" >
-    </fragment>
+        tools:layout="@layout/fragment_diary"></fragment>
 
     <fragment
         android:id="@+id/navigation_todo"
@@ -34,7 +33,7 @@
     <fragment
         android:id="@+id/navigation_setting"
         android:name="com.example.memoriary.ui.mypage.MypageFragment"
-        android:label="Setting"
-        tools:layout="@layout/fragment_setting"/>
+        android:label="My Page"
+        tools:layout="@layout/fragment_setting" />
 
 </navigation>

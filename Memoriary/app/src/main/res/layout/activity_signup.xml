@@ -21,17 +21,14 @@
         android:id="@+id/memoriay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginBottom="68dp"
         android:gravity="center_horizontal|top"
         android:text="Memoriary"
         android:textColor="@color/green"
         android:textSize="40sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/nameInput"
-        app:layout_constraintStart_toEndOf="@+id/name"
-        app:layout_constraintTop_toBottomOf="@+id/let_start"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/let_start" />
 
     <TextView
         android:id="@+id/name"
@@ -51,7 +48,7 @@
 
     <EditText
         android:id="@+id/nameInput"
-        android:layout_width="356dp"
+        android:layout_width="300dp"
         android:layout_height="41dp"
         android:layout_marginBottom="457dp"
         android:hint="Name"
@@ -74,7 +71,7 @@
 
     <NumberPicker
         android:id="@+id/numberPickerYear"
-        android:layout_width="116dp"
+        android:layout_width="100dp"
         android:layout_height="32dp"
         android:layout_marginTop="4dp"
         android:layout_weight="1"
@@ -88,7 +85,7 @@
 
     <NumberPicker
         android:id="@+id/numberPickerMonth"
-        android:layout_width="93dp"
+        android:layout_width="90dp"
         android:layout_height="32dp"
         app:layout_constraintEnd_toStartOf="@+id/numberPickerDay"
         app:layout_constraintHorizontal_bias="0.426"
@@ -101,7 +98,7 @@
 
     <NumberPicker
         android:id="@+id/numberPickerDay"
-        android:layout_width="77dp"
+        android:layout_width="70dp"
         android:layout_height="32dp"
         android:layout_marginEnd="8dp"
         android:selectionDividerHeight="0dp"
@@ -125,7 +122,7 @@
 
     <EditText
         android:id="@+id/editTextEmail"
-        android:layout_width="0dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:hint="Enter Email"
@@ -148,7 +145,7 @@
 
     <EditText
         android:id="@+id/editTextPassword"
-        android:layout_width="0dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="Enter Password"
@@ -182,7 +179,7 @@
 <!--    Gender-->
     <RadioGroup
         android:id="@+id/radioGroupGender"
-        android:layout_width="0dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="@+id/nameInput"
@@ -208,7 +205,7 @@
 <!--    Agreement-->
     <CheckBox
         android:id="@+id/checkBoxAgree"
-        android:layout_width="356dp"
+        android:layout_width="300dp"
         android:layout_height="39dp"
         android:layout_marginTop="4dp"
         android:text="I agree to collect personal information and use of the terms and conditions."
