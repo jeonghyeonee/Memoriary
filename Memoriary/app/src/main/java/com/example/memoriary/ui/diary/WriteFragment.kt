@@ -26,7 +26,10 @@ import com.aallam.openai.api.image.ImageSize
 import com.aallam.openai.api.image.ImageURL
 import com.aallam.openai.client.OpenAI
 import android.Manifest
+import com.example.memoriary.BuildConfig
 import com.example.memoriary.databinding.FragmentWriteBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,6 +43,8 @@ interface WriteFragmentCallback {
 }
 class WriteFragment : Fragment() {
     lateinit var binding : FragmentWriteBinding
+
+    lateinit var auth: FirebaseAuth
     private val databaseReference = FirebaseDatabase.getInstance().reference
     private var writeFragmentCallback: WriteFragmentCallback? = null
     lateinit var thumbnailsFragment: ThumbnailsFragment
@@ -61,7 +66,13 @@ class WriteFragment : Fragment() {
         }
     }
     private fun saveToFirebase(title: String, content: String, image: List<ImageURL>) {
-        val currentUserID = "rainday0828"
+
+        auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        var email = user?.email!!
+        var userName = email.substring(0, email.indexOf('@'))
+
+        val currentUserID = userName
         val newPostRef = databaseReference.child(currentUserID).child("posts").push()
 
         val post = HashMap<String, Any>()
@@ -85,6 +96,7 @@ class WriteFragment : Fragment() {
         binding = FragmentWriteBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         requestMicrophonePermission()
+
         return binding.root
     }
 
@@ -111,7 +123,7 @@ class WriteFragment : Fragment() {
                 CoroutineScope(Main).launch {
                     val image=imageGen(content)
                     saveToFirebase(title, content, image)
-                    Log.d("OpenAI", "Succeed!")
+                    Log.d("ITM", "Succeed!")
                 }
             } else {
                 // Handle empty title or content
@@ -124,8 +136,10 @@ class WriteFragment : Fragment() {
     }
 
     suspend fun imageGen(content: String): List<ImageURL>{
+        val apiKey = BuildConfig.OPENAI_API_KEY
+
         val openai = OpenAI(
-            token = "",
+            token = apiKey,
             timeout = Timeout(socket = 60.seconds)
         )
 
