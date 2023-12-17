@@ -9,7 +9,8 @@
 
     <TextView
         android:id="@+id/titleTextView"
-        android:layout_width="350dp"
+
+       android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="48dp"

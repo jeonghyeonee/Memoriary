@@ -6,4 +6,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="let_start">Let\'s Start</string>
     <string name="memoriay">Memoriay</string>
+    <string name="intro">First step \n to prevent Alzheimer</string>
+    <string name="date_format">%d/%d/%d</string>
 </resources>
