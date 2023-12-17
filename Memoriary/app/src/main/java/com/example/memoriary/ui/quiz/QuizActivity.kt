@@ -19,6 +19,7 @@ import com.example.memoriary.R
 import com.example.memoriary.databinding.ActivityQuizBinding
 import com.example.memoriary.ui.diary.Post
 import com.example.memoriary.ui.diary.ThumbnailsFragment
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -32,6 +33,7 @@ class QuizActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityQuizBinding
 
+    lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
 
     interface FirebaseCallBack {
@@ -40,7 +42,11 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun readFromFirebase(callback: FirebaseCallBack) {
-        val userId = "rainday0828"
+        auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        var email = user?.email!!
+        var userId = email.substring(0, email.indexOf('@'))
+
         database = Firebase.database.reference
         val posts = mutableListOf<Post>()
 

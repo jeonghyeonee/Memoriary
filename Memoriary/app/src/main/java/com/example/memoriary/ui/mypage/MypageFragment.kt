@@ -1,7 +1,9 @@
 package com.example.memoriary.ui.mypage
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -19,6 +21,7 @@ import androidx.core.content.ContextCompat
 import com.example.memoriary.MainActivity
 import com.example.memoriary.R
 import com.example.memoriary.databinding.FragmentMypageBinding
+import com.example.memoriary.signInUp.SigninSignupActivity
 import com.example.memoriary.ui.quiz.QuizActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -49,6 +52,9 @@ class MypageFragment : Fragment() {
     lateinit var storage: FirebaseStorage
     lateinit var uri: Uri
 
+    lateinit var sharedPreferences: SharedPreferences
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -63,6 +69,9 @@ class MypageFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentMypageBinding.inflate(inflater, container, false)
+
+        // Initialize SharedPreferences using the context of the hosting activity
+        sharedPreferences = requireActivity().getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
 
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
@@ -80,7 +89,7 @@ class MypageFragment : Fragment() {
             it.child("rainday0828").child("posts").let {
                 for (i in it.children) {
                     var data = i
-                    Log.d("ITM", "$data")
+                    Log.d("ITM", "data: $data")
                 }
             }
 
@@ -134,9 +143,12 @@ class MypageFragment : Fragment() {
         }
 
         binding.btnSignOut.setOnClickListener {
-            // 파이어베이스 로그아웃 기능 적용하고, 로그인 페이지로 intent해야함
             activity?.let {
-                val intent = Intent(context, MainActivity::class.java)  // 임시로 main activity로 연결함
+                val editor = sharedPreferences.edit()
+                editor.clear()
+                editor.apply()
+
+                val intent = Intent(context, SigninSignupActivity::class.java)
                 startActivity(intent)
             }
         }
