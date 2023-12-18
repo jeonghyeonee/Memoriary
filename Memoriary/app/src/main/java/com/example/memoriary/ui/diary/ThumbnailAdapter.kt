@@ -3,8 +3,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.memoriary.databinding.ItemViewBinding
 import com.example.memoriary.ui.diary.Post
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -12,6 +14,7 @@ import com.google.firebase.ktx.Firebase
 class ThumbnailAdapter(val posts: MutableList<Post>): RecyclerView.Adapter<ThumbnailAdapter.ViewHolder>() {
     companion object {
         lateinit var posts: MutableList<Post>
+        lateinit var auth: FirebaseAuth
     }
     init {
         Companion.posts = posts
@@ -38,6 +41,9 @@ class ThumbnailAdapter(val posts: MutableList<Post>): RecyclerView.Adapter<Thumb
             Log.d("adapter", "title changed!")
             binding.title.text = post.title
             binding.content.text = post.content
+            val imageUrl = post.image
+            Log.d("adapter", "$imageUrl")
+            Glide.with(binding.root).load(imageUrl).into(binding.imageView)
             binding.deleteButton.setOnClickListener {
                 // Call a function to delete the post from Firebase
                 Log.d("ThumbnailAdapter", "Delete button clicked!")
@@ -46,7 +52,10 @@ class ThumbnailAdapter(val posts: MutableList<Post>): RecyclerView.Adapter<Thumb
         }
 
         private fun deletePost(post: Post) {
-            val userId = "rainday0828"
+            auth = FirebaseAuth.getInstance()
+            val user = auth.currentUser
+            var email = user?.email!!
+            var userId = email.substring(0, email.indexOf('@'))
             database = Firebase.database.reference
 
             // Remove the post from the database
