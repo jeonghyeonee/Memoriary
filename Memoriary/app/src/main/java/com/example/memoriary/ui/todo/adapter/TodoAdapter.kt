@@ -94,9 +94,10 @@ class TodoAdapter(private val memoViewModel: MemoViewModel) : RecyclerView.Adapt
     }
 
     // 메모 리스트 갱신
-    fun setData(memo: List<Memo>, updateCallback: (() -> Unit)? = null) {
+    fun setData(memoList: List<Memo>, updateCallback: (() -> Unit)? = null) {
+        this.memoList = memoList // Assign the new list of memos
         this.updateCallback = updateCallback
-        notifyDataSetChanged()
+        notifyDataSetChanged() // Notify the adapter that the data set has changed
     }
 
     // 아이템에 아이디를 설정해줌 (깜빡이는 현상방지)

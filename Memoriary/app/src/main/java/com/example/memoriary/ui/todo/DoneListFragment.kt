@@ -30,6 +30,12 @@ class DoneListFragment : Fragment() {
         binding!!.doneRecyclerView.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         binding!!.doneRecyclerView.adapter = adapter
+
+        memoViewModel.memoList.observe(viewLifecycleOwner, Observer { memoList ->
+            // 데이터가 변경될 때마다 호출되는 코드
+            adapter.setData(memoList)
+        })
+
         return binding!!.root
     }
 

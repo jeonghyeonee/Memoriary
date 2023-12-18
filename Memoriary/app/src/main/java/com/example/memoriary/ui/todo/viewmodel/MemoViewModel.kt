@@ -5,8 +5,10 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.example.memoriary.ui.todo.model.Memo
 import com.example.memoriary.ui.todo.repository.MemoRepository
+import kotlinx.coroutines.Dispatchers
 
 class MemoViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -19,6 +21,41 @@ class MemoViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _readDoneData: MutableLiveData<List<Memo>> = MutableLiveData()
     val readDoneData: LiveData<List<Memo>> get() = _readDoneData
+
+    private var memoListObservers: MutableList<() -> Unit> = mutableListOf()
+
+    // Observer 등록 메서드
+    fun addMemoListObserver(observer: () -> Unit) {
+        memoListObservers.add(observer)
+    }
+
+    // Observer 제거 메서드 (옵션)
+    fun removeMemoListObserver(observer: () -> Unit) {
+        memoListObservers.remove(observer)
+    }
+
+    // Observer에 변경 알리는 메서드
+    private fun notifyMemoListObservers() {
+        Log.d("MemoViewModel", "notifyMemoListObservers: Invoked")
+        for (observer in memoListObservers) {
+            observer.invoke()
+        }
+    }
+
+
+
+
+    fun readDateData(year: Int, month: Int, day: Int) {
+        Thread {
+            val dateData = repository.readDateData(year, month, day)
+
+            // 데이터 갱신
+            _memoList.postValue(dateData)
+
+            // Observer에 알림
+            notifyMemoListObservers()
+        }.start()
+    }
 
     // 데이터 변경 시 호출될 메서드
     private suspend fun notifyObservers() {
@@ -66,17 +103,17 @@ class MemoViewModel(application: Application) : AndroidViewModel(application) {
         return repository.searchDatabase(searchQuery)
     }
 
-    fun readDateData(year: Int, month: Int, day: Int, updateCallback: (() -> Unit)? = null) {
-        Thread {
-            val dateData = repository.readDateData(year, month, day)
-
-            // LiveData에 값을 설정
-            _memoList.postValue(dateData)
-
-            // 콜백 호출
-            updateCallback?.invoke()
-        }.start()
-    }
+//    fun readDateData(year: Int, month: Int, day: Int, updateCallback: (() -> Unit)? = null) {
+//        Thread {
+//            val dateData = repository.readDateData(year, month, day)
+//
+//            // LiveData에 값을 설정
+//            _memoList.postValue(dateData)
+//
+//            // 콜백 호출
+//            updateCallback?.invoke()
+//        }.start()
+//    }
 
     fun readDoneMemos() {
         Thread {
@@ -85,6 +122,12 @@ class MemoViewModel(application: Application) : AndroidViewModel(application) {
             // LiveData에 값을 설정
             _readDoneData.postValue(doneMemos)
         }.start()
+    }
+
+    fun getTodoListForDate(year: Int, month: Int, day: Int): LiveData<List<Memo>> {
+        return liveData(Dispatchers.IO) {
+            emit(repository.getTodoListForDate(year, month, day))
+        }
     }
 }
 
