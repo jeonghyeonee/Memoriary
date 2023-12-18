@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
+import com.example.memoriary.R
 import com.example.memoriary.databinding.FragmentExerciseBinding
 
 class ExerciseFragment : Fragment(), SensorEventListener {
@@ -34,6 +36,7 @@ class ExerciseFragment : Fragment(), SensorEventListener {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentExerciseBinding.inflate(inflater, container, false)
+        Glide.with(this).load(R.raw.shake).into(binding.imageView2)
         return binding.root
     }
 

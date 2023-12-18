@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.memoriary.MainActivity
 import com.example.memoriary.R
 import com.example.memoriary.databinding.FragmentThumbnailsBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -20,6 +21,8 @@ import com.google.firebase.ktx.Firebase
 
 class ThumbnailsFragment : Fragment() {
     lateinit var binding: FragmentThumbnailsBinding
+
+    lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
 
     interface FirebaseCallBack {
@@ -27,7 +30,19 @@ class ThumbnailsFragment : Fragment() {
         fun onError(error: Exception)
     }
     private fun readFromFirebase(callback: FirebaseCallBack) {
-        val userId = "rainday0828"
+
+        auth = FirebaseAuth.getInstance()
+
+        val user = auth.currentUser
+//        if (user != null) {
+//            email = user.email!!
+//            userName = email.substring(0, email.indexOf('@'))
+//        }
+        var email = user?.email!!
+        var userName = email.substring(0, email.indexOf('@'))
+
+        val userId = userName
+        //val userId = "rainday0828"
         database = Firebase.database.reference
         val posts = mutableListOf<Post>()
 
@@ -36,7 +51,8 @@ class ThumbnailsFragment : Fragment() {
                 val key = post.key.toString()
                 val title = post.child("title").value.toString()
                 val content = post.child("content").value.toString()
-                val post = Post(key, title, content)
+                val image = post.child("image").child("0").child("url").value.toString()
+                val post = Post(key, title, content, image)
                 Log.d("Thumb", "$post")
                 posts.add(post)
             }

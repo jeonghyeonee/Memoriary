@@ -31,10 +31,10 @@
         android:id="@+id/viewPager2"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/tabLayout"
         app:layout_constraintStart_toStartOf="@id/tabLayout"
-        android:padding="10dp"
         app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
 
