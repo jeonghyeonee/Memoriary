@@ -27,7 +27,7 @@
 - Add the original repository where the project was initially created as an upstream source.
   ```sh
   git remote add upstream <original repo address>
-  git remote add upstream <https://github.com/jeonghyeonee/Memoriary.git>
+  git remote add upstream https://github.com/jeonghyeonee/Memoriary.git
   ```
 
 ### 4. Verify Remote Repositories
@@ -87,3 +87,28 @@
   # Delete the remote branch
   git push origin --delete <branch>
 ```
+
+## Result
+
+[![Video Label](http://img.youtube.com/vi/j5adWDyW67Q/0.jpg)](https://youtu.be/j5adWDyW67Q)
+
+### Limitation
+
+#### Non-LiveData Implementation Using Observer
+
+##### Background
+
+In certain scenarios, using LiveData in DAO (Data Access Object) might result in errors due to the requirement of non-blocking database operations. To address this limitation, an alternative approach using Observers was implemented.
+
+##### Limitation Description
+
+The decision to move away from LiveData was made to avoid potential issues related to accessing the database on the main thread, which could lead to UI freezes. While the Observer-based implementation resolves the LiveData-related errors, it introduces a delay in synchronous operations.
+
+##### Workaround
+
+To mitigate the synchronous delay introduced by the Observer pattern, consider implementing background threads or coroutines for non-blocking database operations. This ensures that the UI remains responsive while database transactions are being performed.
+
+##### Video Demonstration
+
+For a visual representation of the Observer-based implementation, please refer to the following video:
+[![Video Label](http://img.youtube.com/vi/epPgdZTPbSs/0.jpg)](https://youtu.be/epPgdZTPbSs)
