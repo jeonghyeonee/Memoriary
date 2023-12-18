@@ -46,4 +46,10 @@ class MemoRepository(application: Application) {
     fun searchDatabase(searchQuery: String): List<Memo> {
         return memoDao.searchDatabase(searchQuery)
     }
+
+    suspend fun getTodoListForDate(year: Int, month: Int, day: Int): List<Memo> {
+        return withContext(Dispatchers.IO) {
+            memoDao.getTodoListForDate(year, month, day)
+        }
+    }
 }

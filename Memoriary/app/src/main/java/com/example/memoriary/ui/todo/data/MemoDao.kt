@@ -30,4 +30,8 @@ interface MemoDao {
 
     @Query("SELECT * FROM Memo WHERE content LIKE :searchQuery")
     fun searchDatabase(searchQuery: String): List<Memo>
+
+    @Query("SELECT * FROM Memo WHERE year = :year AND month = :month AND day = :day")
+    fun getTodoListForDate(year: Int, month: Int, day: Int): List<Memo>
+
 }

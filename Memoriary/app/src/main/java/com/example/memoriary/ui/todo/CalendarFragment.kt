@@ -42,20 +42,41 @@ class CalendarFragment : Fragment(), MyCustomDialogInterface {
         // 아이템을 가로로 하나씩 보여주고 어댑터 연결
         binding!!.calendarRecyclerview.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,false)
         binding!!.calendarRecyclerview.adapter = adapter
+        Log.d("RecyclerView", "Item count: ${adapter.itemCount}")
 
 
         binding!!.calendarView.setOnDateChangeListener { _, year, month, day ->
             // 날짜 선택시 그 날의 정보 할당
             this.year = year
-            this.month = month+1
+            this.month = month + 1
             this.day = day
 
             binding!!.calendarDateText.text = "${this.year}/${this.month}/${this.day}"
 
+            // ViewModel을 통해 날짜에 해당하는 Todo 목록을 가져옴
+            val todoList = memoViewModel.getTodoListForDate(this.year, this.month, this.day)
+
+            // todoList를 사용하여 UI 갱신
+            // 예시: todoList를 RecyclerView 등에 전달하여 표시
+//            adapter.setData(todoList)
+
+            memoViewModel.memoList.observe(viewLifecycleOwner, Observer { memoList ->
+                // 데이터가 변경될 때마다 호출되는 코드
+                adapter.setData(memoList)
+            })
 
 
-            // 해당 날짜 데이터를 불러오고, 다른 Fragment로 전환
-            memoViewModel.readDateData(this.year,this.month,this.day)
+            // Observer 등록
+            memoViewModel.addMemoListObserver {
+                // ToDo 목록을 갱신하는 로직
+                activity?.runOnUiThread {
+                    adapter.notifyDataSetChanged()
+                }
+            }
+
+            // 특정 날짜를 선택한 경우 ToDo 목록을 업데이트
+            memoViewModel.readDateData(this.year, this.month, this.day)
+
         }
 
         // 메모 데이터가 수정되었을 경우 날짜 데이터를 불러옴 (currentData 변경)
