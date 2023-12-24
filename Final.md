@@ -91,3 +91,5 @@ Korea is currently in the preliminary stages of transitioning into a super-aging
   - When the user successfully completes the exercise, the user will be notified by the dialog popup it was successful
 
 ## Feedback
+
+There is currently no statistical indicator available to quantify the level of memory. Records such as quiz accuracy are needed to assess memory performance.
